@@ -1,7 +1,6 @@
 package CttHelper;
 
 import CttHelper.model.MappingXPath;
-import CttHelper.model.XPathHolder;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -17,18 +16,18 @@ import java.io.IOException;
 
 public class MainApp extends Application {
 
-    private ObservableList<XPathHolder> mappingData = FXCollections.observableArrayList();
+    public ObservableList<MappingXPath> mappingData = FXCollections.observableArrayList();
 
     public MainApp() {
         // В качестве образца добавляем некоторые данные
-        mappingData.add(new XPathHolder("/some/somechild/somesubchild"));
-        mappingData.add(new XPathHolder("/some/somechild/somesubchild2"));
-        mappingData.add(new XPathHolder("/some/somechild/somesubchild3"));
-        mappingData.add(new XPathHolder("/some/somechild/somesubchild4"));
-        mappingData.add(new XPathHolder("/some/somechild/somesubchild5"));
+        mappingData.add(new MappingXPath("/some/somechild/somesubchild"));
+        mappingData.add(new MappingXPath("/some/somechild/somesubchild2"));
+        mappingData.add(new MappingXPath("/some/somechild/somesubchild3"));
+        mappingData.add(new MappingXPath("/some/somechild/somesubchild4"));
+        mappingData.add(new MappingXPath("/some/somechild/somesubchild5"));
     }
 
-    public ObservableList<XPathHolder> getMappingData() {
+    public ObservableList<MappingXPath> getMappingData() {
         return mappingData;
     }
 

@@ -2,7 +2,6 @@ package CttHelper.view;
 
 import CttHelper.model.MappingXPath;
 import CttHelper.model.MnemonicXPath;
-import CttHelper.model.XPathHolder;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import CttHelper.MainApp;
@@ -17,11 +16,11 @@ import javafx.event.EventHandler;
 
 public class MainFormController {
     @FXML
-    private TableView<XPathHolder> xpathTable;
+    private TableView<MappingXPath> xpathTable;
     @FXML
-    private TableColumn<XPathHolder, String> mappingXpath;
+    private TableColumn<MappingXPath, String> mappingXpath;
     @FXML
-    private TableColumn<XPathHolder, String> mnemonicXpath;
+    private TableColumn<MnemonicXPath, String> mnemonicXpath;
 
 
     // Ссылка на главное приложение.
@@ -43,13 +42,13 @@ public class MainFormController {
         // Инициализация таблицы адресатов с двумя столбцами.
 
 
-        mappingXpath.setCellValueFactory(new PropertyValueFactory<XPathHolder, String>("mappingXPath"));
+        mappingXpath.setCellValueFactory(new PropertyValueFactory<MappingXPath, String>("mappingXPath"));
         mappingXpath.setCellFactory(TextFieldTableCell.forTableColumn());
         mappingXpath.setOnEditCommit(
-                new EventHandler<CellEditEvent<XPathHolder, String>>() {
+                new EventHandler<CellEditEvent<MappingXPath, String>>() {
                     @Override
-                    public void handle(CellEditEvent<XPathHolder, String> t) {
-                        ((XPathHolder) t.getTableView().getItems().get(
+                    public void handle(CellEditEvent<MappingXPath, String> t) {
+                        ((MappingXPath) t.getTableView().getItems().get(
                                 t.getTablePosition().getRow())
                         ).setMappingXPath(t.getNewValue());
                     }
@@ -76,6 +75,12 @@ public class MainFormController {
 
         // Добавление в таблицу данных из наблюдаемого списка
         xpathTable.setItems(mainApp.getMappingData());
+    }
+
+
+    @FXML
+    private void handleGeneratePerson() {
+        xpathTable.getItems().remove(1);
     }
 
 
