@@ -14,8 +14,10 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import CttHelper.view.MainFormController;
+import java.util.ArrayList;
 
 import java.io.*;
+import java.util.Arrays;
 
 public class MainApp extends Application {
 
@@ -96,10 +98,6 @@ public class MainApp extends Application {
         }
     }
 
-    /**
-     * Возвращает главную сцену.
-     * @return
-     */
     public Stage getPrimaryStage() {
         return primaryStage;
     }
@@ -130,7 +128,7 @@ public class MainApp extends Application {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
+        getCommonPartDepth(mappingData);
     }
 
     public void generateMnemonic(){
@@ -140,6 +138,17 @@ public class MainApp extends Application {
         for (MnemonicXPath xpath: mnemonicXPathsData){
             System.out.println(xpath.getMnemonicName()+"="+xpath.getMnemonicXPath());
         }
+    }
+
+    public int getCommonPartDepth(ObservableList<MappingXPath> mapping){
+        ArrayList<ArrayList<String>> matrix = new ArrayList<>();
+        for (MappingXPath xpath:mapping){
+            matrix.add(new ArrayList<>(Arrays.asList(xpath.getMappingXPath().split("/"))));
+        }
+        for (ArrayList<String> tmp: matrix){
+            System.out.println(tmp);
+        }
+        return 0;
     }
 
 }
