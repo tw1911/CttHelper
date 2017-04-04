@@ -2,6 +2,7 @@ package CttHelper.view;
 
 import CttHelper.model.MappingXPath;
 import CttHelper.model.MnemonicXPath;
+import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import CttHelper.MainApp;
@@ -16,13 +17,18 @@ import javafx.event.EventHandler;
 
 public class MainFormController {
     @FXML
-    private TableView<MappingXPath> xpathTable;
+    private TableView<MappingXPath> mappingTable;
+    @FXML
+    private TableView<MnemonicXPath> mnemonicTable;
     @FXML
     private TableColumn<MappingXPath, String> mappingXpath;
     @FXML
-    private TableColumn<MnemonicXPath, String> mnemonicXpath;
-
-
+    private TableColumn<MnemonicXPath, String> mnemonicXPath;
+    @FXML
+    private TableColumn<MnemonicXPath, String> mnemonicName;
+    @FXML
+    Spinner<Integer> commonDeph = new Spinner<Integer>();
+    final int initialValue = 0;
     // Ссылка на главное приложение.
     private MainApp mainApp;
 
@@ -39,8 +45,6 @@ public class MainFormController {
      */
     @FXML
     private void initialize() {
-        // Инициализация таблицы адресатов с двумя столбцами.
-
 
         mappingXpath.setCellValueFactory(new PropertyValueFactory<MappingXPath, String>("mappingXPath"));
         mappingXpath.setCellFactory(TextFieldTableCell.forTableColumn());
@@ -54,14 +58,15 @@ public class MainFormController {
                     }
                 }
         );
-        mnemonicXpath.setCellValueFactory(cellData -> cellData.getValue().MnemonicXPathProperty());
 
-        // Очистка дополнительной информации об адресате.
+        // Value factory.
+        SpinnerValueFactory<Integer> valueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 3, initialValue);
 
-        // Слушаем изменения выбора, и при изменении отображаем
-        // дополнительную информацию об адресате.
-//        xpathTable.getSelectionModel().selectedItemProperty().addListener(
-//                (observable, oldValue, newValue) -> showPersonDetails(newValue));
+        commonDeph.setValueFactory(valueFactory);
+        commonDeph.valueProperty().addListener((obs, oldValue, newValue) ->
+                System.out.println("New value: "+newValue));
+
+
 
     }
 
@@ -74,14 +79,22 @@ public class MainFormController {
         this.mainApp = mainApp;
 
         // Добавление в таблицу данных из наблюдаемого списка
-        xpathTable.setItems(mainApp.getMappingData());
+        mappingTable.setItems(mainApp.getMappingData());
+        mnemonicTable.setItems(mainApp.getMnemonicData());
     }
 
 
     @FXML
-    private void handleGeneratePerson() {
-        xpathTable.getItems().remove(1);
+    private void handleGenerateCttMnemonic() {
+        this.mainApp.generateMnemonic();
+        System.out.println("generate button");
+        mnemonicXPath.setCellValueFactory(cellData -> cellData.getValue().MnemonicXPathProperty());
+        mnemonicName.setCellValueFactory(cellData -> cellData.getValue().MnemonicNameProperty());
     }
 
+    @FXML
+    private void handleSpinner(){
+        System.out.println(commonDeph.getValue());
+    }
 
 }

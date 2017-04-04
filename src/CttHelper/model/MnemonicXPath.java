@@ -8,25 +8,59 @@ import javafx.beans.property.StringProperty;
  */
 public class MnemonicXPath {
 
+
+
     private final StringProperty mnemonicXPath;
+    private final StringProperty mnemonicName;
 
-    public MnemonicXPath(){this(null);}
+    public MnemonicXPath(MappingXPath mapping){
+        this.mnemonicXPath = new SimpleStringProperty(getXPathFromMapping(mapping.getMappingXPath()));
+        this.mnemonicName = new SimpleStringProperty(getMnemonicNameFromMapping(mapping.getMappingXPath()));
+    }
 
-
-    public MnemonicXPath(String xpath) {
+    public MnemonicXPath(String name, String xpath) {
         this.mnemonicXPath = new SimpleStringProperty(xpath);
+        this.mnemonicName = new SimpleStringProperty(name);
     }
 
     public String getMnemonicXPath() {
         return mnemonicXPath.get();
     }
 
+    public String getMnemonicName(){
+        return mnemonicName.get();
+    }
+
     public void setMnemonicXPath(String mappingXPath) {
         this.mnemonicXPath.set(mappingXPath);
     }
+    public void setMnemonicName(String mnemonicName) {this.mnemonicName.set(mnemonicName);}
 
     public StringProperty MnemonicXPathProperty() {
         return mnemonicXPath;
     }
 
+    public StringProperty MnemonicNameProperty() {return mnemonicName; }
+
+    public static String getXPathFromMapping(String mapping){
+        String[] elements = mapping.substring(1).split("/");
+        StringBuilder xpath = new StringBuilder();
+        for (String element : elements){
+            xpath.append("/*[local-name()='"+element+"']");
+        }
+        return xpath.toString();
+    }
+
+    public static String getMnemonicNameFromMapping(String mapping){
+//        if(s.indexOf(commonPart)!=-1){
+//            s = s.substring(commonPart.length());
+//        }
+        String[] elements = mapping.substring(1).split("/");
+        StringBuilder name = new StringBuilder();
+        for (String element : elements){
+            name.append(element+"_");
+        }
+        name.deleteCharAt(name.length()-1);
+        return name.toString();
+    }
 }
