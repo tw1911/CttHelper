@@ -3,6 +3,7 @@ package CttHelper.view;
 import CttHelper.model.MappingXPath;
 import CttHelper.model.MnemonicXPath;
 import javafx.beans.value.ChangeListener;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import CttHelper.MainApp;
@@ -14,6 +15,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.event.EventHandler;
+import javafx.scene.input.Clipboard;
+import javafx.scene.input.ClipboardContent;
 
 public class MainFormController {
     @FXML
@@ -29,6 +32,10 @@ public class MainFormController {
     @FXML
     Spinner<Integer> commonDeph = new Spinner<Integer>();
     final int initialValue = 0;
+    @FXML
+    private Label commPart;
+
+
     // Ссылка на главное приложение.
     private MainApp mainApp;
 
@@ -45,9 +52,11 @@ public class MainFormController {
      */
     @FXML
     private void initialize() {
-
+        mnemonicTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         mappingXpath.setCellValueFactory(new PropertyValueFactory<MappingXPath, String>("mappingXPath"));
         mappingXpath.setCellFactory(TextFieldTableCell.forTableColumn());
+
+
         mappingXpath.setOnEditCommit(
                 new EventHandler<CellEditEvent<MappingXPath, String>>() {
                     @Override
@@ -64,7 +73,7 @@ public class MainFormController {
 
         commonDeph.setValueFactory(valueFactory);
         commonDeph.valueProperty().addListener((obs, oldValue, newValue) ->
-                System.out.println("New value: "+newValue));
+                commPart.setText(mainApp.getCommonPart(newValue)));
 
 
 
@@ -86,15 +95,25 @@ public class MainFormController {
 
     @FXML
     private void handleGenerateCttMnemonic() {
-        this.mainApp.generateMnemonic();
-        System.out.println("generate button");
+        this.mainApp.generateMnemonic(mainApp.getCommonPart(commonDeph.getValue()));
         mnemonicXPath.setCellValueFactory(cellData -> cellData.getValue().MnemonicXPathProperty());
         mnemonicName.setCellValueFactory(cellData -> cellData.getValue().MnemonicNameProperty());
+
     }
 
     @FXML
-    private void handleSpinner(){
-        System.out.println(commonDeph.getValue());
+    private void handleCopyAction(){
+        StringBuilder forClipboard = new StringBuilder();
+        ObservableList<MnemonicXPath> rowList = mnemonicTable.getSelectionModel().getSelectedItems();
+        for (MnemonicXPath mnemonic :  rowList){
+            forClipboard.append(mnemonic.getMnemonicName()+"="+mnemonic.getMnemonicXPath());
+            forClipboard.append("\n");
+        }
+        final ClipboardContent content = new ClipboardContent();
+
+        content.putString(forClipboard.toString());
+        Clipboard.getSystemClipboard().setContent(content);
     }
+
 
 }

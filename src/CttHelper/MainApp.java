@@ -128,27 +128,22 @@ public class MainApp extends Application {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        getCommonPartDepth(mappingData);
     }
 
-    public void generateMnemonic(){
+    public void generateMnemonic(String commPart){
+        mnemonicXPathsData.clear();
         for(MappingXPath mapping: mappingData){
-            mnemonicXPathsData.add(new MnemonicXPath(mapping));
+            mnemonicXPathsData.add(new MnemonicXPath(mapping,commPart));
         }
-        for (MnemonicXPath xpath: mnemonicXPathsData){
-            System.out.println(xpath.getMnemonicName()+"="+xpath.getMnemonicXPath());
-        }
+
     }
 
-    public int getCommonPartDepth(ObservableList<MappingXPath> mapping){
-        ArrayList<ArrayList<String>> matrix = new ArrayList<>();
-        for (MappingXPath xpath:mapping){
-            matrix.add(new ArrayList<>(Arrays.asList(xpath.getMappingXPath().split("/"))));
+    public String getCommonPart(int depth){
+        StringBuilder commPart = new StringBuilder();
+        String[] xpath = mappingData.get(0).getMappingXPath().substring(1).split("/");
+        for (int i=0; i<depth;i++){
+            commPart.append("/"+xpath[i]);
         }
-        for (ArrayList<String> tmp: matrix){
-            System.out.println(tmp);
-        }
-        return 0;
+        return commPart.toString();
     }
-
 }

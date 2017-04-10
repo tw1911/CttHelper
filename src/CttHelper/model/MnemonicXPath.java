@@ -13,9 +13,9 @@ public class MnemonicXPath {
     private final StringProperty mnemonicXPath;
     private final StringProperty mnemonicName;
 
-    public MnemonicXPath(MappingXPath mapping){
+    public MnemonicXPath(MappingXPath mapping,String commPart){
         this.mnemonicXPath = new SimpleStringProperty(getXPathFromMapping(mapping.getMappingXPath()));
-        this.mnemonicName = new SimpleStringProperty(getMnemonicNameFromMapping(mapping.getMappingXPath()));
+        this.mnemonicName = new SimpleStringProperty(getMnemonicNameFromMapping(mapping.getMappingXPath(),commPart));
     }
 
     public MnemonicXPath(String name, String xpath) {
@@ -51,10 +51,13 @@ public class MnemonicXPath {
         return xpath.toString();
     }
 
-    public static String getMnemonicNameFromMapping(String mapping){
-//        if(s.indexOf(commonPart)!=-1){
-//            s = s.substring(commonPart.length());
-//        }
+    public static String getMnemonicNameFromMapping(String mapping,String commonPart){
+        if(commonPart.length()>=mapping.length()){
+            return "to long common part";
+        }
+        if(mapping.indexOf(commonPart)!=-1){
+            mapping = mapping.substring(commonPart.length());
+        }
         String[] elements = mapping.substring(1).split("/");
         StringBuilder name = new StringBuilder();
         for (String element : elements){
