@@ -53,6 +53,7 @@ public class MainFormController {
     @FXML
     private void initialize() {
         mnemonicTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        mappingTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         mappingXpath.setCellValueFactory(new PropertyValueFactory<MappingXPath, String>("mappingXPath"));
         mappingXpath.setCellFactory(TextFieldTableCell.forTableColumn());
 
@@ -113,6 +114,11 @@ public class MainFormController {
 
         content.putString(forClipboard.toString());
         Clipboard.getSystemClipboard().setContent(content);
+    }
+
+    @FXML
+    private void handlePasteAction(){
+        System.out.println("Paste");
     }
 
 

@@ -23,6 +23,22 @@
                     <columns>
                       <TableColumn fx:id="mappingXpath" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="500.0" text="XPath" />
                     </columns>
+                     <contextMenu>
+                        <ContextMenu>
+                          <items>
+                              <MenuItem mnemonicParsing="false" text="Копировать">
+                                 <accelerator>
+                                    <KeyCodeCombination alt="UP" code="C" control="ANY" meta="UP" shift="UP" shortcut="UP" />
+                                 </accelerator>
+                              </MenuItem>
+                            <MenuItem mnemonicParsing="false" onAction="#handlePasteAction" text="Вставить">
+                                 <accelerator>
+                                    <KeyCodeCombination alt="UP" code="V" control="ANY" meta="UP" shift="UP" shortcut="UP" />
+                                 </accelerator>
+                              </MenuItem>
+                          </items>
+                        </ContextMenu>
+                     </contextMenu>
                   </TableView>
                   <Label layoutX="7.0" layoutY="6.0" text="Общая часть:" />
                   <Spinner fx:id="commonDeph" editable="true" layoutX="88.0" layoutY="2.0" prefHeight="25.0" prefWidth="55.0" />
