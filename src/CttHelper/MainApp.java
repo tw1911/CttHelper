@@ -10,6 +10,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.TabPane;
+import javafx.scene.input.Clipboard;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
@@ -127,6 +128,17 @@ public class MainApp extends Application {
             reader.close();
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+    public void loadMappingFromClipboard(){
+        Clipboard clipboard = Clipboard.getSystemClipboard();
+        if(clipboard.hasString()) {
+            mappingData.clear();
+            String clipboardString = clipboard.getString();
+            String[] list = clipboardString.split("\\r?\\n");
+            for (String line:list){
+                mappingData.add(new MappingXPath(line));
+            }
         }
     }
 

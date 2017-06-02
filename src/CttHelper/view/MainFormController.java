@@ -18,6 +18,8 @@ import javafx.event.EventHandler;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 
+import java.util.ArrayList;
+
 public class MainFormController {
     @FXML
     private TableView<MappingXPath> mappingTable;
@@ -118,8 +120,7 @@ public class MainFormController {
 
     @FXML
     private void handlePasteAction(){
-        System.out.println("Paste");
+        this.mainApp.loadMappingFromClipboard();
     }
-
 
 }
