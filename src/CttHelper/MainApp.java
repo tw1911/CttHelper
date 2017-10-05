@@ -2,8 +2,12 @@ package CttHelper;
 
 import CttHelper.model.MappingXPath;
 import CttHelper.model.MnemonicXPath;
+import CttHelper.view.MnemonicFormController;
+import CttHelper.view.PutFormController;
 import CttHelper.view.RootLayoutController;
 import javafx.application.Application;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
@@ -24,6 +28,7 @@ public class MainApp extends Application {
 
     private ObservableList<MappingXPath> mappingData = FXCollections.observableArrayList();
     private ObservableList<MnemonicXPath> mnemonicXPathsData = FXCollections.observableArrayList();
+    private ObservableList<StringProperty> putExpressions = FXCollections.observableArrayList();
 
     public MainApp() {
         // В качестве образца добавляем некоторые данные
@@ -38,6 +43,8 @@ public class MainApp extends Application {
         return mappingData;
     }
     public ObservableList<MnemonicXPath> getMnemonicData() {return mnemonicXPathsData;}
+    public ObservableList<StringProperty> getPutExpressions(){return putExpressions;}
+
 
     private Stage primaryStage;
     private BorderPane rootLayout;
@@ -82,18 +89,32 @@ public class MainApp extends Application {
      */
     public void showMainForm() {
         try {
-            // Загружаем сведения об адресатах.
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(MainApp.class.getResource("view/MainForm.fxml"));
-            AnchorPane personOverview = (AnchorPane) loader.load();
+            AnchorPane MainForm = (AnchorPane) loader.load();
 
-            // Помещаем сведения об адресатах в центр корневого макета.
-            rootLayout.setCenter(personOverview);
+            rootLayout.setCenter(MainForm);
 
             // Даём контроллеру доступ к главному приложению.
             MainFormController controller = loader.getController();
             controller.setMainApp(this);
 
+            FXMLLoader loader1 = new FXMLLoader();
+            loader1.setLocation(MainApp.class.getResource("view/PutForm.fxml"));
+            AnchorPane putPane = (AnchorPane) loader1.load();
+            controller.setTab("Put",putPane);
+            // Даём контроллеру доступ к главному приложению.
+            PutFormController putController = loader1.getController();
+            putController.setMainApp(this);
+            putController.setMainFormController(controller);
+
+            FXMLLoader loader2 = new FXMLLoader();
+            loader2.setLocation(MainApp.class.getResource("view/MnemonicForm.fxml"));
+            AnchorPane mnemonicPane = (AnchorPane) loader2.load();
+            controller.setTab("Mnemonic",mnemonicPane);
+            MnemonicFormController mnemonicController = loader2.getController();
+            mnemonicController.setMainApp(this);
+            mnemonicController.setMainFormController(controller);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -148,6 +169,13 @@ public class MainApp extends Application {
             mnemonicXPathsData.add(new MnemonicXPath(mapping,commPart));
         }
 
+    }
+
+    public void generatePut(int depth){
+        putExpressions.clear();
+        for(MappingXPath mapping: mappingData){
+            putExpressions.add(new SimpleStringProperty(mapping.getMappingXPath()));
+        }
     }
 
     public String getCommonPart(int depth){

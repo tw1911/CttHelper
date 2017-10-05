@@ -5,6 +5,7 @@ import CttHelper.model.MnemonicXPath;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import CttHelper.MainApp;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -17,26 +18,28 @@ import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.event.EventHandler;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
+import javafx.scene.layout.AnchorPane;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class MainFormController {
     @FXML
     private TableView<MappingXPath> mappingTable;
     @FXML
-    private TableView<MnemonicXPath> mnemonicTable;
-    @FXML
     private TableColumn<MappingXPath, String> mappingXpath;
-    @FXML
-    private TableColumn<MnemonicXPath, String> mnemonicXPath;
-    @FXML
-    private TableColumn<MnemonicXPath, String> mnemonicName;
     @FXML
     Spinner<Integer> commonDeph = new Spinner<Integer>();
     final int initialValue = 0;
     @FXML
     private Label commPart;
+    @FXML
+    private Tab PutTab,MnemonicTab;
 
+    public void setTab(String tabName,AnchorPane content){
+        if(tabName=="Put"){PutTab.setContent(content);}
+        if(tabName=="Mnemonic"){MnemonicTab.setContent(content);}
+    }
 
     // Ссылка на главное приложение.
     private MainApp mainApp;
@@ -54,7 +57,7 @@ public class MainFormController {
      */
     @FXML
     private void initialize() {
-        mnemonicTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+
         mappingTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         mappingXpath.setCellValueFactory(new PropertyValueFactory<MappingXPath, String>("mappingXPath"));
         mappingXpath.setCellFactory(TextFieldTableCell.forTableColumn());
@@ -92,30 +95,6 @@ public class MainFormController {
 
         // Добавление в таблицу данных из наблюдаемого списка
         mappingTable.setItems(mainApp.getMappingData());
-        mnemonicTable.setItems(mainApp.getMnemonicData());
-    }
-
-
-    @FXML
-    private void handleGenerateCttMnemonic() {
-        this.mainApp.generateMnemonic(mainApp.getCommonPart(commonDeph.getValue()));
-        mnemonicXPath.setCellValueFactory(cellData -> cellData.getValue().MnemonicXPathProperty());
-        mnemonicName.setCellValueFactory(cellData -> cellData.getValue().MnemonicNameProperty());
-
-    }
-
-    @FXML
-    private void handleCopyAction(){
-        StringBuilder forClipboard = new StringBuilder();
-        ObservableList<MnemonicXPath> rowList = mnemonicTable.getSelectionModel().getSelectedItems();
-        for (MnemonicXPath mnemonic :  rowList){
-            forClipboard.append(mnemonic.getMnemonicName()+"="+mnemonic.getMnemonicXPath());
-            forClipboard.append("\n");
-        }
-        final ClipboardContent content = new ClipboardContent();
-
-        content.putString(forClipboard.toString());
-        Clipboard.getSystemClipboard().setContent(content);
     }
 
     @FXML
